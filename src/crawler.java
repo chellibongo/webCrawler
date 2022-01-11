@@ -1,14 +1,73 @@
+import java.io.IOException;
+import java.util.ArrayList;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class crawler {
-    private static String website;
-
-    public static void crawl(int level, String url, ArrayList<String> visited) {
-        if(level <=2)
+    
+    //list of all pages requested
+    private static ArrayList<String> viewedPages = new ArrayList<String>();
+    
+    public static void main(String args[]) {
+    
+        String website = args[0];
+        
+        crawl(0,website,viewedPages);
+    
+        
     }
+
+    //recursive function to request a webpage, iterate through href tages recursively calling itself on each one
+    private static void crawl(int level, String url, ArrayList<String> visited) {
+        //filter out download links
+        if(url.contains(".pdf")) {
+            
+        }
+        else {
+            if(level <= 1) {
+                //fill document
+                Document doc = request(url, visited);
+
+                if(doc != null) {
+                    //iterate through each href link found in doc
+                    for(Element link : doc.select("a[href]")) {
+                        String next_link = link.absUrl("href");
+                        if(visited.contains(next_link) == false) {
+                            crawl(level++, next_link, visited);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static Document request(String url, ArrayList<String> v) {
+        try {
+            //establish connection to url provided
+            Connection con = Jsoup.connect(url);
+            Thread.sleep(100);
+            //download contents of page and store in an html document
+            Document doc = con.get();
+            //if successful connection (returns HTTP status code 200)
+            if(con.response().statusCode() == 200) {
+                System.out.println("Link: " + url);
+                System.out.println(doc.title());
+                //add url to list of visited urls
+                v.add(url);
+                //return contents of page
+                return doc;
+            }
+            return null;
+        } catch(IOException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }
