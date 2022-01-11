@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -11,13 +12,14 @@ public class Crawler extends Thread {
     private static ArrayList<String> viewedPages = new ArrayList<String>();
     private int i;
     private String url;
+    private static fileWriter fwrite;
 
     //initialise Crawler and set level and url to crawl
     public Crawler(int i, String url) {
 
         viewedPages = new ArrayList<String>();
         this.url = url;
-        
+        fwrite = new fileWriter();
     }
 
     public void run() {
@@ -49,6 +51,7 @@ public class Crawler extends Thread {
                 //fill document
                 Document doc = request(url, visited);
 
+
                 if(doc != null) {
                     //iterate through each href link found in doc
                     for(Element link : doc.select("a[href]")) {
@@ -69,10 +72,12 @@ public class Crawler extends Thread {
             Thread.sleep(100);
             //download contents of page and store in an html document
             Document doc = con.get();
+
             //if successful connection (returns HTTP status code 200)
             if(con.response().statusCode() == 200) {
                 System.out.println("Link: " + url);
                 System.out.println(doc.title());
+                fwrite.writeFile(doc.title(),doc.toString());
                 //add url to list of visited urls
                 v.add(url);
                 //return contents of page
