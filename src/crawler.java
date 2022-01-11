@@ -5,19 +5,38 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class crawler {
+public class Crawler extends Thread {
     
     //list of all pages requested
     private static ArrayList<String> viewedPages = new ArrayList<String>();
-    
-    public static void main(String args[]) {
-    
-        String website = args[0];
-        
-        crawl(0,website,viewedPages);
-    
+    private int i;
+    private String url;
+
+    //initialise Crawler and set level and url to crawl
+    public Crawler(int i, String url) {
+
+        viewedPages = new ArrayList<String>();
+        this.url = url;
         
     }
+
+    public void run() {
+        crawl(i,url, viewedPages);
+    }
+
+    // public void start() {
+    //     crawl(i, url, viewedPages);
+    // }
+
+    
+    // public static void main(String args[]) {
+    
+    //     String website = args[0];
+        
+    //     crawl(0,website,viewedPages);
+    
+        
+    // }
 
     //recursive function to request a webpage, iterate through href tages recursively calling itself on each one
     private static void crawl(int level, String url, ArrayList<String> visited) {
