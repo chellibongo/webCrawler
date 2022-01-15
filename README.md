@@ -1,18 +1,13 @@
-## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This is a java project to create a web crawler that will download each html page found, it uses the jsoup library
 
-## Folder Structure
+The main class is App.java, the program requires a url to be passed as an argument, this will be the first url the crawler will open.
 
-The workspace contains two folders by default, where:
+How to compline:
+program compiled using VSCode but can be manually compiled by "javac App.java" and will need jsoup included in the class path
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+How to run:
+"java App https:www.example.co.uk"
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+Dependencies:
+jsoup-1.14.3.jar
